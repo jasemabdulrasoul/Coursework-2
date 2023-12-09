@@ -13,4 +13,17 @@ typedef struct {
 // Helper function prototypes
 void tokeniseRecord(const char *input, const char *delimiter, char *date, char *time, char *steps);
 
+void DisplayMenu();
+
+int OptionA();
+
+void OptionB();
+
+void OptionC();
+
+void OptionD();
+
+void OptionE();
+
+void OptionF();
 #endif // FITNESS_DATA_STRUCT_H
