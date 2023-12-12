@@ -42,7 +42,6 @@ int OptionA(){
         return 1;
     }
 
-    // Close the file when done
     fclose(file);
 
     return 0;
@@ -96,7 +95,7 @@ void OptionC(){
     int records = 0; //variable for number of records
     char line[100]; //variable for lines
     FITNESS_DATA instance[100]; //array to use later
-    int StepList[100];
+    int StepList[100]; // new array to use later
 
     while( fgets(line, 100, file) !=NULL ) //while loop to go over each line
     {
@@ -119,24 +118,25 @@ void OptionC(){
         token = strtok(NULL, delim);
         if (token != NULL){
             instance[records].steps = atoi(token); //change from string to integer
-            StepList[records] = atoi(token);
+            StepList[records] = atoi(token); //this is the new array to store the steps
         }
         records++;
     }
     
     // This is the New addition for option c
-    int fewest = StepList[0];
-    int indexFew = 0;
-    for(int i = 1; i < records; i++){
+    int fewest = StepList[0]; //set the fewest as the first number in the array
+    int indexFew = 0; //variable for the index
+    for(int i = 1; i < records; i++){ //check all items in list and compare
         if (StepList[i] < fewest) {
-            fewest = StepList[i];
-            indexFew = i;
+            fewest = StepList[i]; //update the fewest variable if there is a new smallest number
+            indexFew = i; // update the index of the smallest number
         }
     }
     printf("Fewest steps: %s %s\n", instance[indexFew].date, instance[indexFew].time);
 }
 
 void OptionD(){
+    //this is the code from my previous coursework
     FILE *file = fopen("FitnessData_2023.csv", "r"); //opening file
     if (file == NULL) { //check if its empty
         perror(""); //print error
@@ -173,18 +173,20 @@ void OptionD(){
         record++;
     }
     
+    // this is the new addition which is somehwat similar to option C
     int largest = StepList[0];
     int indexLarge = 0;
     for(int j = 1; j < record; j++){
-        if (StepList[j] > largest) {
+        if (StepList[j] > largest) { // main difference is the comparing sign; here it is greater thatn instead of less than
             largest = StepList[j];
-            indexLarge = j;
+            indexLarge = j; //variable names also changed
         }
     }
-    printf("Largest steps: %s %s\n", instances[indexLarge].date, instances[indexLarge].time);
+    printf("Largest steps: %s %s\n", instances[indexLarge].date, instances[indexLarge].time); 
 }
 
 void OptionE(){
+    //this is the code from my previous corsework
     FILE *file = fopen("FitnessData_2023.csv", "r"); //opening file
     if (file == NULL) { //check if its empty
         perror(""); //print error
@@ -220,14 +222,17 @@ void OptionE(){
         }
         record++;
     }
-    int sum = 0;
+    
+    // this is the new addition
+    int sum = 0; // variable for sum
     for(int i = 0; i < record; i++){
-        sum = sum + StepList[i];
+        sum = sum + StepList[i]; // go over every number and add it to get the sum
     }
-    printf("Mean step count: %d\n", sum / record);
+    printf("Mean step count: %d\n", sum / record); // print the mean which is the sum divided by the number of items (record)
 }
 
 void OptionF() {
+    // this is the code from my previous coursework
     FILE *file = fopen("FitnessData_2023.csv", "r"); //opening file
     if (file == NULL) { //check if its empty
         perror(""); //print error
@@ -264,23 +269,24 @@ void OptionF() {
         record++;
     }
 
-    int threshold = 500;
-    int CurrentStreak = 0;
-    int LongestStreak = 0;
-    int StartIndex = 0;
+    //this is the new addition
+    int threshold = 500; //variable for the threshold
+    int CurrentStreak = 0; //variable to count the current streak
+    int LongestStreak = 0; //variable to count the longest streak reached yet
+    int StartIndex = 0; // variable for the starting point
     int LSSI = 0; // Longest streak start index
     int LSEI = 0; // Longest streak end index
 
-    for (int i = 0; i < record; i++) {
-        if (StepList[i] > threshold) {
-            if (CurrentStreak == 0) {
+    for (int i = 0; i < record; i++) { // go over all numbers and check if the number is above 500 or not
+        if (StepList[i] > threshold) { // if it is above the treshold add 1 to the current streak
+            if (CurrentStreak == 0) { //if the current streak is zero start a new streak
                 StartIndex = i; // Start of a new streak
             }
             CurrentStreak++;
-        } else {
+        } else { //if the it reaches a number that is less than the threshold, update the longest streak if possible
             if (CurrentStreak > LongestStreak) {
                 LongestStreak = CurrentStreak;
-                LSSI = StartIndex;
+                LSSI = StartIndex; //get the indecies of the starting and ending points
                 LSEI = i - 1;
             }
             CurrentStreak = 0; // Reset the streak counter
@@ -289,15 +295,13 @@ void OptionF() {
 
     // Check for the longest streak at the end of the array
     if (CurrentStreak > LongestStreak) {
-        LongestStreak = CurrentStreak;
-        LSSI = StartIndex;
+        LongestStreak = CurrentStreak; //update the longest streak if possible
+        LSSI = StartIndex; //get the indecies of the starting and ending points
         LSEI = record - 1;
     }
 
-    if (LongestStreak > 0) {
-        printf("Longest period start: %s %s\n", instances[LSSI].date, instances[LSSI].time);
-        printf("Longest period end: %s %s\n", instances[LSEI].date, instances[LSEI].time);
-    }
+    printf("Longest period start: %s %s\n", instances[LSSI].date, instances[LSSI].time);
+    printf("Longest period end: %s %s\n", instances[LSEI].date, instances[LSEI].time);
 
 }
 
@@ -336,23 +340,23 @@ void tokeniseRecord(const char *input, const char *delimiter,
 // Complete the main function
 int main() {
     
-    int result;
-    char choice;
+    int result; //variable to use in optionA
+    char choice; // variable to store user input
 
-    do{
-        DisplayMenu();
+    do{ // using do to keep looping while a certain condition is not occuring
+        DisplayMenu(); // displays the options and asks user for input
         scanf(" %c", &choice);
 
-        switch (choice){
+        switch (choice){ // switch to make an action depending on the input
             case 'a':
             case 'A':
-                result = OptionA();
-                if (result == 0){
+                result = OptionA(); // stores the whatever optionA returns in result
+                if (result == 0){ // if there is no error, print successfull message
                 printf("File successfully loaded.\n");
                 }
                 break;
-            case 'b':
-            case 'B':
+            case 'b': // for each option , use both uppercase and lowercase to prevent errors
+            case 'B': // for each option, call the function that coresponds to the choice
                 OptionB();
                 break;
             case 'c':
@@ -373,13 +377,13 @@ int main() {
                 break;
             case 'q':
             case 'Q':
-                break;
+                break; //this option just quits meaning that it does not need a function
             default:
-                printf("Invalid Choice. Try again.\n");
+                printf("Invalid Choice. Try again.\n"); // print this if the choice is not in the options provided
         }
-    } while(choice != 'Q' && choice != 'q');
+    } while(choice != 'Q' && choice != 'q'); // this is the while condition that creates a loop as long as the user does not choose to quit
     
 
 
-    return 0; // Return 0 to indicate success
+    return 0;
 }
