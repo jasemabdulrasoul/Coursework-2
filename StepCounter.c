@@ -354,6 +354,9 @@ int main() {
                 if (result == 0){ // if there is no error, print successfull message
                 printf("File successfully loaded.\n");
                 }
+                else if(result == 1){
+                    exit(0);
+                }
                 break;
             case 'b': // for each option , use both uppercase and lowercase to prevent errors
             case 'B': // for each option, call the function that coresponds to the choice
