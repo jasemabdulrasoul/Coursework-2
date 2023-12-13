@@ -78,6 +78,8 @@ int main() {
         fprintf(file, "%s\t%s\t%d\n", instance[i].date, instance[i].time, instance[i].steps);
     }
     fclose(file);
-
+    
+    printf("Data sorted and written to FitnessData_2023.csv.tsv");
+    
     return 0;
 }
